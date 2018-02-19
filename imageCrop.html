@@ -185,6 +185,7 @@
             padding-left: 10px;
             padding-right: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -216,6 +217,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $(function cropit() {
         $('.image-editor').cropit({
@@ -239,7 +241,8 @@
 
         $('.export').click(function () {
             var imageData = $('.image-editor').cropit('export');
-            window.open(imageData);
+            localStorage.setItem("croppedImage", imageData);
+            window.location.href = "planeEditor.html";
         });
     });
 
@@ -249,6 +252,106 @@
 //        cropit();
 //        $(".cropitReload").attr('src', src.split('?')[0] + "?" + Math.floor(Math.random()* 10000000));
 //    });
+
+//
+//    var element = document.getElementById('socket'),
+//        x = 0, y = 0;
+//
+//    interact('.circle-component')
+//        .draggable({
+//            snap: {
+//                targets: [
+//                    interact.createSnapGrid({ x: 15, y: 15 })
+//                ],
+//                range: Infinity,
+//                relativePoints: [ { x: 0, y: 0 } ]
+//            },
+//            inertia: true,
+//            restrict: {
+//                restriction: element.parentNode,
+//                elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+//                endOnly: true
+//            },
+//            onmove: dragMoveListener,
+//        });
+//        function dragMoveListener (event) {
+//            var target = event.target,
+//                // keep the dragged position in the data-x/data-y attributes
+//                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+//                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+//
+//            // translate the element
+//            target.style.webkitTransform =
+//                target.style.transform =
+//                    'translate(' + x + 'px, ' + y + 'px)';
+//
+//            // update the posiion attributes
+//            target.setAttribute('data-x', x);
+//            target.setAttribute('data-y', y);
+//        }
+
+
+
+
+    // target elements with the "draggable" class
+    interact('.draggable')
+        .draggable({
+            // enable inertial throwing
+            inertia: true,
+            // keep the element within the area of it's parent
+            restrict: {
+                restriction: "parent",
+                endOnly: true,
+                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+            },
+            // enable autoScroll
+            autoScroll: true,
+            // enable snapping to grid
+            snap: {
+                targets: [
+                    interact.createSnapGrid({ x: 15, y: 15 })
+                ],
+                range: Infinity,
+                relativePoints: [ { x: 0, y: 0 } ]
+            },
+
+            // call this function on every dragmove event
+            onmove: dragMoveListener,
+            // call this function on every dragend event
+            onend: function (event) {
+                var textEl = event.target.querySelector('p');
+
+                textEl && (textEl.textContent =
+                    'moved a distance of '
+                    + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+                    Math.pow(event.pageY - event.y0, 2) | 0))
+                        .toFixed(3) + 'px');
+            }
+        });
+
+    function dragMoveListener (event) {
+        var target = event.target,
+            // keep the dragged position in the data-x/data-y attributes
+            x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+            y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+        // translate the element
+        target.style.webkitTransform =
+            target.style.transform =
+                'translate(' + x + 'px, ' + y + 'px)';
+
+        // update the posiion attributes
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+    }
+
+    // this is used later in the resizing and gesture demos
+    window.dragMoveListener = dragMoveListener;
+
+
+
 </script>
+
+<script>window.__theme = 'bs4';</script>
 </body>
 </html>

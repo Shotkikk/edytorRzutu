@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script>
+        if(!localStorage.croppedImage){
+            window.location.href = "imageCrop.html";
+        }
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/tooltip.js/dist/tooltip.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    <script src="node_modules/interactjs/dist/interact.min.js"></script>
+
+    <script src="JS/fileLoad.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Barlow:500" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0;
+            color: #626262;
+            font-family: 'Barlow', sans-serif ;
+            background: #F9F9FA;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            text-transform: uppercase;
+        }
+
+        .vmiddle {
+            vertical-align: middle !important;
+        }
+
+        .btn-scale {
+            position: absolute;
+            float: left;
+            z-index: 2;
+            margin-left: 10px;
+        }
+        .btn-round-lg {
+            border-radius: 22.5px;
+        }
+        .btn-round {
+            border-radius: 17px;
+        }
+        .btn-round-sm {
+            border-radius: 15px;
+        }
+        .btn-round-xs {
+            border-radius: 11px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .circle-component {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            background-color: #007bff;
+            border: solid 1px transparent;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 1.1em;
+            padding: 5px;
+            z-index: 3;
+            text-align: center;
+        }
+        .circle-component:hover,
+        .circle-component:focus,
+        .circle-component:active {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        .circle-component > svg{
+            pointer-events: none;
+        }
+
+        #drag-me::before {
+            content: "#" attr(id);
+            font-weight: bold;
+        }
+
+        #drag-1, #drag-2 {
+            -webkit-transform: translate(0px, 0px);
+            transform: translate(0px, 0px);
+        }
+
+        .swipe-button-right .icon {
+            position: absolute;
+            right: 50px;
+            top: -5px;
+            padding: 10px;
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            -ms-transition: all 0.3s ease;
+        }
+
+        .swipe-button-right:hover span {
+            margin-right: -27px;
+        }
+
+        .swipe-button {
+            float: left;
+            font-size: 1.1em;
+            display: block;
+            margin: 5px;
+            padding: 4.8px 7px 4.8px 7px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.5s ease;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .swipe-button span {
+            display: inline-block;
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            -ms-transition: all 0.3s ease;
+        }
+        .swipe-button .icon {
+            position: absolute;
+            right: -50px;
+            top: -5px;
+            padding: 10px;
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            -ms-transition: all 0.3s ease;
+        }
+        .swipe-button:hover .icon {
+            right: -2px;
+        }
+        .swipe-button:hover span {
+            margin-right: 27px;
+        }
+        .right-panel{
+            z-index: 3;
+            background-color: #fff;
+            height: 100%;
+            padding: 15px 20px 15px 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19);
+        }
+        .full-size{
+            height: 100%;
+        }
+        .right-panel-section{
+            margin-bottom: 15px;
+        }
+        #workspace{
+            z-index: 2;
+        }
+        #workspaceBackground{
+            pointer-events: none;
+            position: absolute;
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        .edit-panel{
+            width: 100%;
+            height: 100%;
+        }
+        .edit-panel-section{
+            display: none;
+        }
+        .fast-access-panel-section{
+            overflow-y: auto;
+            max-height: 350px;
+        }
+        .fast-access-item {
+            font-size: 10px;
+        }
+        .fast-access-item > span{
+            font-size: 14px;
+            line-height: 48px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid full-size">
+    <div class="row full-size">
+        <div class="col-md-10" id="workspaceBackground">
+        </div>
+        <div class="col-md-10" id="workspace">
+        </div>
+        <div class="col-md-2 right-panel">
+            <div class="row">
+                <div class="col-md-12 right-panel-section">
+                    <h5>Komponent</h5>
+                    <div class="clearfix">
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-plug" data-toggle="tooltip" data-placement="top" title="Gniazdko">
+                            <span><i class="fas fa-plug fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-toggle-on">
+                            <span><i class="fas fa-toggle-on fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-lightbulb">
+                            <span><i class="fas fa-lightbulb fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-bolt">
+                            <span><i class="fas fa-bolt fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-battery-three-quarters">
+                            <span><i class="fas fa-battery-three-quarters fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                    </div>
+                    <div class="clearfix">
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-cog">
+                            <span><i class="fas fa-cog fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-link">
+                            <span><i class="fas fa-link fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-database">
+                            <span><i class="fas fa-database fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-inbox">
+                            <span><i class="fas fa-inbox fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-add" id="-signal">
+                            <span><i class="fas fa-signal fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-12 right-panel-section">
+                    <h5>Grupa</h5>
+                    <div class="clearfix">
+                        <button class="swipe-button btn btn-round-lg btn-outline-primary scale-button component-group-add">
+                            <span><i class="fas fa-ellipsis-h fa-fw"></i></span><div class="icon"><i class="fas fa-plus fa-fw"></i></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-12 right-panel-section">
+                    <h5>Szybki dostęp</h5>
+                    <div class="clearfix fast-access-panel-section">
+                        <div class="fast-access-item">
+                            <button class="swipe-button-right btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                            <span class="component-info-icon">
+                                <i class="fas fa-minus fa-fw"></i>
+                            </span>
+                                <div class="icon"><i class="fas fa-minus fa-fw"></i></div>
+                            </button>
+                            <span>
+                                ID: 405, X: 420.5, Y: 323.5
+                            </span>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!--<div class="col-md-12 right-panel-section edit-panel-section">-->
+                    <!--<h5 class="component-info-name">Gniazdko</h5>-->
+                    <!--<div class="edit-panel">-->
+                        <!--<button class="swipe-button btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top">-->
+                            <!--<span class="component-info-icon">-->
+                                <!--<i class="fas fa-minus fa-fw"></i>-->
+                            <!--</span>-->
+                            <!--<div class="icon">-->
+                                <!--<i class="fas fa-minus fa-fw"></i>-->
+                            <!--</div>-->
+                        <!--</button>-->
+                        <!--<div class="float-left">-->
+                            <!--<ul>-->
+                                <!--<li>-->
+                                    <!--Id: <span class="component-info-id"></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--Czy grupa: <span class="component-info-group"></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--X: <span class="component-info-x"></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--Y: <span class="component-info-y"></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--Wysokość: <span class="component-info-height"></span>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            </div>
+            <div class="row">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    var componentIdNumber = 0;
+    var componentAttributes = [];
+
+    $('#workspaceBackground').css('background-image', 'url(' + localStorage.croppedImage + ')');
+
+    interact('.draggable')
+        .draggable({
+            inertia: true,
+            restrict: {
+                restriction: "parent",
+                endOnly: true,
+                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+            },
+            autoScroll: true,
+            snap: {
+                targets: [
+                    interact.createSnapGrid({ x: 9.5, y: 9.5 })
+                ],
+                range: Infinity,
+                relativePoints: [ { x: 0, y: 0 } ]
+            },
+
+            onmove: dragMoveListener,
+            onend: function (e) {
+                var textEl = e.target.querySelector('p');
+
+                textEl && (textEl.textContent =
+                    'moved a distance of '
+                    + (Math.sqrt(Math.pow(e.pageX - e.x0, 2) +
+                    Math.pow(e.pageY - e.y0, 2) | 0))
+                        .toFixed(2) + 'px');
+            }
+        });
+
+    function dragMoveListener (e) {
+        var target = e.target,
+            x = (parseFloat(target.getAttribute('data-x')) || 0) + e.dx,
+            y = (parseFloat(target.getAttribute('data-y')) || 0) + e.dy;
+
+        target.style.webkitTransform =
+            target.style.transform =
+                'translate(' + x + 'px, ' + y + 'px)';
+
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+
+        $('#' + componentAttributes['PanelId'] + ' .component-info-x').html(x);
+        $('#' + componentAttributes['PanelId'] + ' .component-info-y').html(y);
+    }
+
+    window.dragMoveListener = dragMoveListener;
+
+    $('.component-add').on('click', function() {
+        $('#workspace').append('<div id="component-id-' + componentIdNumber + '" class="draggable circle-component" title="' + $(this).attr('title') + '"><i class="fas fa' + $(this).attr('id') + '"></i></div>');
+        $('.right-panel > .row').append('<div id="panel-id-' + componentIdNumber + '" class="col-md-12 right-panel-section edit-panel-section"><h5 class="component-info-name"></h5><div class="edit-panel"><button class="swipe-button btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top"><span class="component-info-icon"><i class="fas fa-minus fa-fw"></i></span><div class="icon"><i class="fas fa-minus fa-fw"></i></div></button><div class="float-left"><ul><li>Id: <span class="component-info-id"></span></li><li>Czy grupa: <span class="component-info-group"></span></li><li>X: <span class="component-info-x"></span></li><li>Y: <span class="component-info-y"></span></li><li>Wysokość: <span class="component-info-height"></span></li></ul></div></div></div>');
+        $('.right-panel > .row').append('<div id="panel-id-' + componentIdNumber + '" class="col-md-12 right-panel-section edit-panel-section"><h5 class="component-info-name"></h5><div class="edit-panel"><button class="swipe-button btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top"><span class="component-info-icon"><i class="fas fa-minus fa-fw"></i></span><div class="icon"><i class="fas fa-minus fa-fw"></i></div></button><div class="float-left"><ul><li>Id: <span class="component-info-id"></span></li><li>Czy grupa: <span class="component-info-group"></span></li><li>X: <span class="component-info-x"></span></li><li>Y: <span class="component-info-y"></span></li><li>Wysokość: <span class="component-info-height"></span></li></ul></div></div></div>');
+        componentIdNumber++;
+    });
+
+    $('svg').on('click', function() {
+        console.log($(this));
+    });
+
+    $('#workspace').on('mousedown', 'div', function() {
+
+        componentAttributes['CurrentId'] = $(this).attr('id');
+        componentAttributes['CurrentIdNumber'] = componentAttributes['CurrentId'].replace(/\D/g,'');
+        componentAttributes['PanelId'] = 'panel-id-' + componentAttributes['CurrentIdNumber'];
+        componentAttributes['Name'] = $(this).attr('title');
+        componentAttributes['Icon'] = $(this).find('svg').attr('data-icon');
+
+        $('.edit-panel-section').css('display', 'none');
+        $('#' + componentAttributes['PanelId']).css('display', 'block');
+        $('#' + componentAttributes['PanelId'] + ' .component-info-id').html(componentAttributes['CurrentIdNumber']);
+        $('#' + componentAttributes['PanelId'] + ' .component-info-name').html(componentAttributes['Name']);
+        $('#' + componentAttributes['PanelId'] + ' .component-info-icon').html('<i class="fas fa-' + componentAttributes["Icon"] + ' fa-fw"></i>');
+    });
+
+    $(document).on('click', '.component-delete', function() {
+        $('#' + componentAttributes['CurrentId']).remove();
+        $('#' + componentAttributes['PanelId']).remove();
+    })
+</script>
+</body>
+</html>
