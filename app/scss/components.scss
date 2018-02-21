@@ -1,0 +1,60 @@
+.circle-component {
+  background-color: #007bff;
+  border: solid 1px transparent;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 1.1em;
+  height: 38px;
+  padding: 5px;
+  position: absolute;
+  text-align: center;
+  width: 38px;
+  z-index: 3;
+}
+
+.circle-component {
+  &:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+  &:focus {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+  &:active {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+  > svg {
+    pointer-events: none;
+  }
+}
+
+.right-panel {
+  background-color: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19);
+  height: 100%;
+  padding: 15px 20px 15px 20px;
+  z-index: 3;
+}
+
+.right-panel-section {
+  margin-bottom: 15px;
+}
+
+.edit-panel-section {
+  display: none;
+}
+
+.fast-access-panel-section {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.fast-access-item {
+  font-size: 10px;
+  > span {
+    font-size: 14px;
+    line-height: 48px;
+  }
+}
