@@ -21,6 +21,6 @@ $(function cropit() {
     $('.export').click(function () {
         var imageData = $('.image-editor').cropit('export');
         localStorage.setItem("croppedImage", imageData);
-        window.location.href = "planeEditor.html";
+        window.location.href = "planeEditor.min.html";
     });
 });

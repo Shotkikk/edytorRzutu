@@ -54,16 +54,32 @@
   }
 }
 .swipe-button-right {
+  cursor: pointer;
+  display: block;
+  float: right;
+  font-size: 1.1em;
+  margin: 5px;
+  overflow: hidden;
+  padding: 4.8px 7px 4.8px 7px;
+  position: relative;
+  transition: all 0.5s ease;
   &:hover {
     span {
-      margin-right: -27px;
+      margin-left: 27px;
+    }
+    .icon {
+      left: -2px;
     }
   }
+  span {
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
   .icon {
-    position: absolute;
-    right: 50px;
-    top: -5px;
     padding: 10px;
+    position: absolute;
+    left: -50px;
+    top: -5px;
     transition: all 0.3s ease;
   }
 }

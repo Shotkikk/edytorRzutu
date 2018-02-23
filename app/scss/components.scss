@@ -48,13 +48,17 @@
 
 .fast-access-panel-section {
   max-height: 350px;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .fast-access-item {
   font-size: 10px;
   > span {
+    margin-left: 10px;
     font-size: 14px;
-    line-height: 48px;
+    line-height: 39px;
+  }
+  &:nth-child(2n-1){
+    background-color: #ECEFF1;
   }
 }

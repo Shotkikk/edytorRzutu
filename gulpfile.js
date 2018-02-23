@@ -2,8 +2,8 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var plumber = require('gulp-plumber');
 var htmlmin = require('gulp-htmlmin');
 var minifyCss = require('gulp-minify-css');
 var autoprefixer = require('gulp-autoprefixer');
@@ -11,9 +11,11 @@ var stripComments = require('gulp-strip-comments');
 var stripCssComments = require('gulp-strip-css-comments');
 var browserSync = require('browser-sync').create();
 
+
 // Minify pipe: app/*.html -> dist/*.min.html
 gulp.task('html', function () {
     return gulp.src('app/*.html')
+        .pipe(plumber())
         .pipe(stripComments())
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(rename({ suffix: '.min' }))
@@ -29,6 +31,7 @@ gulp.task('css', function () {
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'app/scss/**/*.scss'
     ])
+        .pipe(plumber())
         .pipe(sass())
         .pipe(concat('styles.min.css'))
         .pipe(autoprefixer())
@@ -45,11 +48,12 @@ gulp.task('js', function () {
     return gulp.src([
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/bootstrap/dist/js/bootstrap.min.js',
+        'node_modules/cropit/dist/jquery.cropit.js',
         'node_modules/interactjs/dist/interact.min.js'
     ])
+        .pipe(plumber())
         .pipe(concat('scripts.min.js'))
         .pipe(stripComments())
-        .pipe(uglify())
         .pipe(gulp.dest('dist/js/'))
         .pipe(browserSync.reload({
             stream: true
@@ -59,8 +63,8 @@ gulp.task('js', function () {
 // Minify pipe: app/js/**/*.js -> app/js/*.js
 gulp.task('js-app', function () {
     return gulp.src('app/js/**/*.js')
+        .pipe(plumber())
         .pipe(stripComments())
-        .pipe(uglify())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist/js/'))
         .pipe(browserSync.reload({
@@ -71,6 +75,7 @@ gulp.task('js-app', function () {
 // Copy pipe: app/fonts/**/*.{ttf,otf} -> app/fonts/**/*.{ttf,otf}
 gulp.task('fonts', function () {
     return gulp.src('app/fonts/**/*.{ttf,otf}')
+        .pipe(plumber())
         .pipe(gulp.dest('dist/fonts'))
 });
 
@@ -79,7 +84,7 @@ gulp.task('browserSync', function() {
     browserSync.init({
         server: {
             baseDir: 'dist',
-            index: 'planeEditor.min.html'
+            index: 'imageCrop.min.html'
         }
     })
 });

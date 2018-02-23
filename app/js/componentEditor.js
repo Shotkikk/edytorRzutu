@@ -1,11 +1,12 @@
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+jQuery(function () {
+    jQuery('[data-toggle="tooltip"]').tooltip()
 })
 
 var componentIdNumber = 0;
 var componentAttributes = [];
+var idToTrash = 0;
 
-$('#workspaceBackground').css('background-image', 'url(' + localStorage.croppedImage + ')');
+jQuery('#workspaceBackground').css('background-image', 'url(' + localStorage.croppedImage + ')');
 
 interact('.draggable')
     .draggable({
@@ -48,39 +49,40 @@ function dragMoveListener (e) {
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
 
-    $('#' + componentAttributes['PanelId'] + ' .component-info-x').html(x);
-    $('#' + componentAttributes['PanelId'] + ' .component-info-y').html(y);
+    jQuery('#' + componentAttributes['PanelId'] + ' .component-info-x').html(x);
+    jQuery('#' + componentAttributes['PanelId'] + ' .component-info-y').html(y);
 }
 
 window.dragMoveListener = dragMoveListener;
 
-$('.component-add').on('click', function() {
-    $('#workspace').append('<div id="component-id-' + componentIdNumber + '" class="draggable circle-component" title="' + $(this).attr('title') + '"><i class="fas fa' + $(this).attr('id') + '"></i></div>');
-    $('.right-panel > .row').append('<div id="panel-id-' + componentIdNumber + '" class="col-md-12 right-panel-section edit-panel-section"><h5 class="component-info-name"></h5><div class="w-100 h-100"><button class="swipe-button btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top"><span class="component-info-icon"><i class="fas fa-minus fa-fw"></i></span><div class="icon"><i class="fas fa-minus fa-fw"></i></div></button><div class="float-left"><ul><li>Id: <span class="component-info-id"></span></li><li>Czy grupa: <span class="component-info-group"></span></li><li>X: <span class="component-info-x"></span></li><li>Y: <span class="component-info-y"></span></li><li>Wysokość: <span class="component-info-height"></span></li></ul></div></div></div>');
-    $('.right-panel > .row').append('<div id="panel-id-' + componentIdNumber + '" class="col-md-12 right-panel-section edit-panel-section"><h5 class="component-info-name"></h5><div class="w-100 h-100"><button class="swipe-button btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top"><span class="component-info-icon"><i class="fas fa-minus fa-fw"></i></span><div class="icon"><i class="fas fa-minus fa-fw"></i></div></button><div class="float-left"><ul><li>Id: <span class="component-info-id"></span></li><li>Czy grupa: <span class="component-info-group"></span></li><li>X: <span class="component-info-x"></span></li><li>Y: <span class="component-info-y"></span></li><li>Wysokość: <span class="component-info-height"></span></li></ul></div></div></div>');
+jQuery('.component-add').on('click', function() {
+    jQuery('#workspace').append('<div id="component-id-' + componentIdNumber + '" class="draggable circle-component" title="' + jQuery(this).attr('title') + '"><i class="fas fa' + jQuery(this).attr('id') + '"></i></div>');
+    jQuery('.right-panel > .row').append('<div id="panel-id-' + componentIdNumber + '" class="col-md-12 right-panel-section edit-panel-section"><h5 class="component-info-name"></h5><div class="w-100 h-100"><button class="swipe-button btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top"><span class="component-info-icon"><i class="fas fa-minus fa-fw"></i></span><div class="icon"><i class="fas fa-minus fa-fw"></i></div></button><div class="float-left"><ul><li>Id: <span class="component-info-id"></span></li><li>Czy grupa: <span class="component-info-group"></span></li><li>X: <span class="component-info-x"></span></li><li>Y: <span class="component-info-y"></span></li><li>Wysokość: <span class="component-info-height"></span></li></ul></div></div></div>');
     componentIdNumber++;
 });
 
-$('svg').on('click', function() {
-    console.log($(this));
+jQuery('svg').on('click', function() {
+    console.log(jQuery(this));
 });
 
-$('#workspace').on('mousedown', 'div', function() {
+jQuery('#workspace').on('mousedown', 'div', function() {
 
-    componentAttributes['CurrentId'] = $(this).attr('id');
+    jQuery('#panel-id-' + idToTrash).css('display', 'none');
+
+    componentAttributes['CurrentId'] = jQuery(this).attr('id');
     componentAttributes['CurrentIdNumber'] = componentAttributes['CurrentId'].replace(/\D/g,'');
     componentAttributes['PanelId'] = 'panel-id-' + componentAttributes['CurrentIdNumber'];
-    componentAttributes['Name'] = $(this).attr('title');
-    componentAttributes['Icon'] = $(this).find('svg').attr('data-icon');
+    componentAttributes['Name'] = jQuery(this).attr('title');
+    componentAttributes['Icon'] = jQuery(this).find('svg').attr('data-icon');
+    idToTrash = componentAttributes['CurrentIdNumber'];
 
-    $('.edit-panel-section').css('display', 'none');
-    $('#' + componentAttributes['PanelId']).css('display', 'block');
-    $('#' + componentAttributes['PanelId'] + ' .component-info-id').html(componentAttributes['CurrentIdNumber']);
-    $('#' + componentAttributes['PanelId'] + ' .component-info-name').html(componentAttributes['Name']);
-    $('#' + componentAttributes['PanelId'] + ' .component-info-icon').html('<i class="fas fa-' + componentAttributes["Icon"] + ' fa-fw"></i>');
+    jQuery('#' + componentAttributes['PanelId']).css('display', 'block');
+    jQuery('#' + componentAttributes['PanelId'] + ' .component-info-id').html(componentAttributes['CurrentIdNumber']);
+    jQuery('#' + componentAttributes['PanelId'] + ' .component-info-name').html(componentAttributes['Name']);
+    jQuery('#' + componentAttributes['PanelId'] + ' .component-info-icon').html('<i class="fas fa-' + componentAttributes["Icon"] + ' fa-fw"></i>');
 });
 
-$(document).on('click', '.component-delete', function() {
-    $('#' + componentAttributes['CurrentId']).remove();
-    $('#' + componentAttributes['PanelId']).remove();
+jQuery(document).on('click', '.component-delete', function() {
+    jQuery('#' + componentAttributes['CurrentId']).remove();
+    jQuery('#' + componentAttributes['PanelId']).remove();
 })

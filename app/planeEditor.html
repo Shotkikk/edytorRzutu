@@ -3,9 +3,10 @@
 <head>
 
     <script>
-//        if(!localStorage.croppedImage){
-//            window.location.href = "imageCrop.min.html";
-//        }
+        FontAwesomeConfig = { searchPseudoElements: true };
+        if(!localStorage.croppedImage){
+            window.location.href = "imageCrop.min.html";
+        }
     </script>
 
     <link href="css/styles.min.css" rel="stylesheet" type="text/css">
@@ -94,18 +95,16 @@
                     <h5>Szybki dostęp</h5>
                     <div class="clearfix fast-access-panel-section">
                         <div class="fast-access-item">
+                            <span class="fast-access-item-text">
+                                ID: 405, X: 420.5, Y: 323.5
+                            </span>
                             <button class="swipe-button-right btn btn-round-lg btn-outline-danger scale-button component-delete" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
                             <span class="component-info-icon">
                                 <i class="fas fa-minus fa-fw"></i>
                             </span>
                                 <div class="icon"><i class="fas fa-minus fa-fw"></i></div>
                             </button>
-                            <span>
-                                ID: 405, X: 420.5, Y: 323.5
-                            </span>
                         </div>
-
-
                     </div>
                 </div>
                 <!--<div class="col-md-12 right-panel-section edit-panel-section">-->
@@ -148,7 +147,7 @@
         </div>
     </div>
 </div>
-<script src="dist/js/componentEditor.min.js"></script>
+<script src="js/componentEditor.min.js"></script>
 <script>
 
 
