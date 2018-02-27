@@ -11,6 +11,11 @@ Exlect is a pure way to make your home wiring plane.
 
 Exlect requires gulp and npm to run.
 
+```sh
+$ apt-get install npm
+$ npm install --global gulp-cli
+```
+
 Install dependencies:
 
 ```sh
